@@ -232,7 +232,7 @@ void handleclient(uint64_t conn_s_p)
 	p2x = pTick.tick % 256;
 
 	// welcome message
-	ssend(conn_s, "220-SNMAPI v2.50 FTP Server\r\n");
+	ssend(conn_s, "220-SNMAPI v4.80 FTP Server\r\n");
 	sprintf(buffer, "%i %s\r\n", 220, VERSION);	ssend(conn_s, buffer);
 
 	// set working directory
@@ -243,13 +243,12 @@ void handleclient(uint64_t conn_s_p)
 
 		if (recv(conn_s, buffer, 2047, 0) > 0)
 		{
-			
+
 			// get rid of the newline at the end of the string
 			buffer[strcspn(buffer, "\n")] = '\0';
 			buffer[strcspn(buffer, "\r")] = '\0';
 
 			int split = ssplit(buffer, cmd, 15, param, 511);
-			printf("cmd: %s\n", cmd);
 			if (loggedin == 1)
 			{
 				// available commands when logged in
@@ -339,7 +338,6 @@ void handleclient(uint64_t conn_s_p)
 													else { data[i][k] = 0; i++; k = 0; }
 													if (i >= 6)
 													{
-														printf("FTP: error the port function\n");
 														break;
 													}
 												}
@@ -353,11 +351,9 @@ void handleclient(uint64_t conn_s_p)
 													{
 														ssend(conn_s, "200 O\r\n");
 														dataactive = 1;
-														printf("FTP: client connected!\n");
 													}
 													else
 													{
-														printf("could not connect!\n");
 														ssend(conn_s, "451 E\r\n");
 													}
 												}
@@ -557,44 +553,44 @@ void handleclient(uint64_t conn_s_p)
 														else
 															if (strcasecmp(cmd, "RETR") == 0)
 															{
-																printf("get file!\n");
+
 																if (data_s > 0)
 																{
-																	printf("data_spassed\n");
+
 																	if (split == 1)
 																	{
 																		absPath(filename, param, cwd);
-																		printf("split passed\n");
+
 																		if (cellFsStat(filename, &buf) == CELL_FS_SUCCEEDED)
 																		{
 																			ssend(conn_s, "150 O\r\n");
-																			printf("filestats passed\n");
+
 																			int rr = 0;
 
 																			if (cellFsOpen(filename, CELL_FS_O_RDONLY, &fd, NULL, 0) == CELL_FS_SUCCEEDED)
 																			{
-																				printf("cellFsOpen passed\n");
+
 																				uint64_t read_e = 0, pos; //, write_e
 
 																				cellFsLseek(fd, 0, CELL_FS_SEEK_SET, &pos);
-																				printf("cellFsSeek passed\n");
+
 																				while (1)
 																				{
-																					printf("while loop reached\n"); 
+
 																					if (cellFsRead(fd, (void *)buffer, 3000, &read_e) == CELL_FS_SUCCEEDED)
 																					{
-																						printf("cellfsread doing\n");
+
 																						if (read_e>0)
 																							send(data_s, buffer, (size_t)read_e, 0);
 																						else
 																						{
-																							printf("FTP: Error the read function\n");
+
 																							break;
 																						}
 																					}
 																					else
 																					{
-																						printf("FTP: Error read not succeeded!\n");
+
 																						rr = -2; break;
 																					}
 																				}
@@ -623,7 +619,7 @@ void handleclient(uint64_t conn_s_p)
 																}
 																else
 																{
-																	printf("data conn not active!\n");
+
 																	ssend(conn_s, "425 E\r\n");
 																}
 															}
@@ -719,11 +715,11 @@ void handleclient(uint64_t conn_s_p)
 																							{
 																								if ((read_e = (uint64_t)recv(data_s, buffer, 3000, MSG_WAITALL)) > 0)
 																								{
-																									if (cellFsWrite(fd, buffer, read_e, NULL) != CELL_FS_SUCCEEDED) { printf("FTP: write data\n"); rr = -1; break; }
+																									if (cellFsWrite(fd, buffer, read_e, NULL) != CELL_FS_SUCCEEDED) { rr = -1; break; }
 																								}
 																								else
 																								{
-																									printf("FTP: read_e smaller than 0\n");
+
 																									break;
 																								}
 																							}
@@ -934,12 +930,12 @@ void handleclient(uint64_t conn_s_p)
 						}
 			}
 		}
-		
+
 		sys_timer_usleep(1668);
 		sys_ppu_thread_yield();
 
 	}
-	printf("FTP: closed thread! \n");
+
 	sclose(&conn_s);
 	sclose(&data_s);
 	sys_ppu_thread_exit(0);

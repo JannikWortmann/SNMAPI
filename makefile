@@ -18,7 +18,7 @@ PPU_SRCS = printf.c libc.c main.c ftp.c SNMAPI_Lib.c
 PPU_PRX_TARGET = sys_audio.elf
 PPU_PRX_LDFLAGS += $(PRX_LDFLAGS_EXTRA)
 PPU_PRX_STRIP_FLAGS = -s
-PPU_PRX_LDLIBS 	= -lfs_stub -lnet_stub -lrtc_stub -lio_stub -lc_stub -lm -lstdc++_stub -lstdc++
+PPU_PRX_LDLIBS 	= -lfs_stub -lnet_stub -lrtc_stub -lio_stub -lc_stub -lssl_stub
 #-lgcm_sys_stub
 PPU_PRX_LDLIBS 	+= -lcrashdump_system_export_stub \
                    -lsysPrxForUser_export_stub \
@@ -30,7 +30,8 @@ PPU_PRX_LDLIBS 	+= -lcrashdump_system_export_stub \
                    -lsdk_export_stub \
                    -lstdc_export_stub \
                    -lpngdec_ppuonly_export_stub \
-                   -lxsetting_export_stub
+                   -lxsetting_export_stub \
+									 -lsys_io_export_stub
 
 PPU_CFLAGS += -Os -ffunction-sections -fdata-sections -fno-builtin-printf -nodefaultlibs -std=gnu99 -Wno-shadow -Wno-unused-parameter
 #PPU_CFLAGS += -finline-limit=100
@@ -43,10 +44,6 @@ all:
 	$(MAKE) $(PPU_OBJS_DEPENDS)
 	$(PPU_PRX_STRIP) --strip-debug --strip-section-header $(PPU_PRX_TARGET)
 	$(PRX_DIR)/scetool -0 SELF -1 TRUE -s FALSE -2 04 -3 1070000052000001 -4 01000002 -5 APP -6 0003004000000000 -A 0001000000000000 -e $(PPU_PRX_TARGET) $(PPU_SPRX_TARGET)
-	
+
 
 include $(CELL_MK_DIR)/sdk.target.mk
-
-
-
-

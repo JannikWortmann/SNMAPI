@@ -1,5 +1,0 @@
-@echo off
-
-make
-
-pause
