@@ -9,7 +9,7 @@ endif
 include	$(PSL1GHT)/ppu_rules
 
 BUILD		:=	build
-SOURCES		:=	.
+SOURCES		:=	src .
 INCLUDES	:=	.
 
 #---------------------------------------------------------------------------------
@@ -83,7 +83,7 @@ install: all
 lib: SNMAPI.sprx
 #---------------------------------------------------------------------------------
 
-libexport.o: libexport.c
+libexport.o: src/libexport.c
 	@$(CC) $(DEPSOPT) -S -m32 $(INCLUDE) $< -o libexport.S
 	@$(CC) $(DEPSOPT) -c libexport.S -o $@
 
@@ -92,9 +92,7 @@ SNMAPI.prx: exports.o libexport.o
 
 SNMAPI.sprx: SNMAPI.prx
 		@$(FSELF) SNMAPI.prx SNMAPI.sprx
-		rm exports.o
-		rm libexport.S libexport.o
-		rm SNMAPI.prx
+		cp SNMAPI.sprx ../SNMAPI.sprx
 #---------------------------------------------------------------------------------
 clean:
 #---------------------------------------------------------------------------------
