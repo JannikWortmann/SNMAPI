@@ -47,22 +47,9 @@ endif
 #---------------------------------------------------------------------------------
 
 
-LIBRARY		:= $(LIBDIR)/liblv2
-
 #---------------------------------------------------------------------------------
-LD			:=	$(PREFIX)ld -lfs_stub -lnet_stub -lrtc_stub -lio_stub -lc_stub -lssl_stub
-LD		 	+=  -lcrashdump_system_export_stub \
-				-lsysPrxForUser_export_stub \
-				-lvsh_export_stub \
-				-lpaf_export_stub \
-				-lvshmain_export_stub \
-				-lvshtask_export_stub \
-				-lallocator_export_stub \
-				-lsdk_export_stub \
-				-lstdc_export_stub \
-				-lpngdec_ppuonly_export_stub \
-				-lxsetting_export_stub \
-				-lsys_io_export_stub
+LD			:=	$(PREFIX)ld
+FSELF		:=	fself.py
 
 CFLAGS		:= -O2 -mregnames -Wall -mcpu=cell $(MACHDEP) $(INCLUDE) -Wa,-mcell
 ASFLAGS		:= $(MACHDEP) -mregnames -mcpu=cell -D__ASSEMBLY__ -Wa,-mcell $(INCLUDE)
@@ -88,21 +75,26 @@ install: all
 	@cp -frv $(CURDIR)/lib/ppu/*.a $(PSL1GHT)/ppu/lib
 
 #---------------------------------------------------------------------------------
-$(LIBRARY).a: sprx.o
-#---------------------------------------------------------------------------------
+
 
 .PHONY: lib ppu install
 
 #---------------------------------------------------------------------------------
-lib: $(LIBRARY).a
+lib: SNMAPI.sprx
 #---------------------------------------------------------------------------------
 
 libexport.o: libexport.c
 	@$(CC) $(DEPSOPT) -S -m32 $(INCLUDE) $< -o libexport.S
 	@$(CC) $(DEPSOPT) -c libexport.S -o $@
 
-sprx.o: exports.o libexport.o
+SNMAPI.prx: exports.o libexport.o
 		@$(LD) -r exports.o libexport.o -o $@
+
+SNMAPI.sprx: SNMAPI.prx
+		@$(FSELF) SNMAPI.prx SNMAPI.sprx
+		rm exports.o
+		rm libexport.S libexport.o
+		rm SNMAPI.prx
 #---------------------------------------------------------------------------------
 clean:
 #---------------------------------------------------------------------------------
