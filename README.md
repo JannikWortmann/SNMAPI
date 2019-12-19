@@ -9,8 +9,8 @@ These instructions will you help to setup a working copy on your local machine.
 To Compile this Project you need the PS3Toolchain although it's tested and easier to use the 
 ps3toolchain-minimal from 
 
-<!-- Place this tag where you want the button to render. -->
-<a class="github-button" href="https://github.com/scrapes/ps3toolchain-minimal/subscription" data-icon="octicon-eye" data-size="large" data-show-count="true" aria-label="Watch scrapes/ps3toolchain-minimal on GitHub">Watch</a>
+[scrapes/ps3toolchain-minimal](https://github.com/scrapes/ps3toolchain-minimal)
+
 
 After Pulling, Building or Installing this toolchain you cant just use the make command in the root of this project.
 
@@ -52,7 +52,3 @@ Return Type: Int, `0` for success and `-1` for error
 - Jannik Wortmann - Development and Research
 
 ## Acknowledgements ##
-
-
-
-<script async defer src="https://buttons.github.io/buttons.js"></script>
