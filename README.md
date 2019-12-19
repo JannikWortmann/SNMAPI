@@ -6,7 +6,14 @@ This project is an API for the Playstation 3. You need a jailbroken PS3 to use t
 These instructions will you help to setup a working copy on your local machine. 
 
 ### Setup for compiling ###
-TODO
+To Compile this Project you need the PS3Toolchain although it's tested and easier to use the 
+ps3toolchain-minimal from 
+
+[scrapes/ps3toolchain-minimal](https://github.com/scrapes/ps3toolchain-minimal)
+
+
+After Pulling, Building or Installing this toolchain you cant just use the make command in the root of this project.
+
 
 ### Installing ###
 1. Rename `dev_flash/sys/internal/sys_audio.sprx` to `sys_SNMAPI.sprx`. 
@@ -45,4 +52,3 @@ Return Type: Int, `0` for success and `-1` for error
 - Jannik Wortmann - Development and Research
 
 ## Acknowledgements ##
-
